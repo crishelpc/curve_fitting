@@ -44,5 +44,15 @@ def interpolate_missing_values(x, y):
     # Interpolate missing values
     for i in range(n):
         if pd.isnull(y[i]):
-            y[i] = int(round(applyFormula(x[i], x_known, diff_table, len(x_known))))
+            y[i] = float(round(applyFormula(x[i], x_known, diff_table, len(x_known)), 2))
     return y
+
+
+if __name__ == "__main__":
+    x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    y = [12, 18, 21, None, 15, 23, 25, None, 30, 28]
+    
+    result = interpolate_missing_values(x, y)
+    print(result)
+    
+    
