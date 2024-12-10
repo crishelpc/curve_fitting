@@ -1,13 +1,1 @@
-tter(x, y)
-plt.plot(x, y)
-
-plt.scatter(x, norm1)
-plt.plot(x, norm1)
-
-plt.scatter(x, norm2)
-plt.plot(x, norm2)
-
-plt.scatter(x, norm3)
-plt.plot(x, norm3)
-
-plt.show()
+[12, 18, 21, 13.85, 15, 23, 25, 21.58, 30, 28]
