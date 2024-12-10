@@ -1,75 +1,78 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import optimize
-
+from scipy.optimize import fmin_l_bfgs_b
 
 class CurveFitting:
     def __init__(self, x_values, y_values):
-        self.x = x_values
-        self.y = y_values
-        self.result = []
+        self.x_values = np.array(x_values)
+        self.y_values = np.array(y_values)
         
-    def first_norm(self):
-        m = 1
-        b = 1
+    def error1(self, parameters):
+        m, b = parameters
         
-        self.norm1 = []
-        residuals = []
-        
-        for i in range(len(self.x)):
-            value = m * self.x[i] + b
-            self.norm1.append(value)
-            residual = abs(value - self.y[i])
-            residuals.append(residual)
-        
-        residual_sum = sum(residuals)
-        return residual_sum
+        norm1 = m * self.x_values + b
+        error = np.sum(np.abs(norm1 - self.y_values))
+        return error
     
-    def second_norm(self):
-        m = 2
-        b = 2
+    def error2(self, parameters):
+        m, b = parameters
         
-        self.norm2 = []
-        residuals = []
-        
-        for i in range(len(self.x)):
-            value = m * self.x[i] + b
-            self.norm2.append(value)
-            residual = (value - self.y[i])**2
-            residuals.append(residual)
-        
-        residual_sum = round((sum(residuals))**(1/2), 4)
-        return residual_sum
+        norm1 = m * self.x_values + b
+        error = np.sum(np.pow(norm1 - self.y_values, 2))
+        return error
     
-    def infinity_norm(self):
-        m = 3
-        b = 3
+    def error3(self, parameters):
+        m, b = parameters
         
-        self.norm3 = []
-        residuals = []
+        norm1 = m * self.x_values + b
+        error = max(np.abs(norm1 - self.y_values))
+        return error
+    
+    def optimize_norm1(self, initial_values):
+        result = fmin_l_bfgs_b(
+                self.error1, 
+                x0=np.array(initial_values), 
+                approx_grad=True  
+            )
         
-        for i in range(len(self.x)):
-            value = m * self.x[i] + b
-            self.norm3.append(value)
-            residual = abs(value - self.y[i])
-            residuals.append(residual)
+        self.norm1_m, self.norm1_b = result[0]
+        self.norm1_val = self.norm1_m * self.x_values + self.norm1_b
         
-        residual_sum = max(residuals)
-        return residual_sum
-
+    def optimize_norm2(self, initial_values):
+        result = fmin_l_bfgs_b(
+                self.error2, 
+                x0=np.array(initial_values), 
+                approx_grad=True  
+            )
+        
+        self.norm2_m, self.norm2_b = result[0]
+        self.norm2_val = self.norm2_m * self.x_values + self.norm2_b
+        
+    def optimize_norm3(self, initial_values):
+        result = fmin_l_bfgs_b(
+                self.error3, 
+                x0=np.array(initial_values), 
+                approx_grad=True  
+            )
+        
+        self.norm3_m, self.norm3_b = result[0]
+        self.norm3_val = self.norm3_m * self.x_values + self.norm3_b
+        
+        
 if __name__ == "__main__":
     x = [0, 5, 8, 12, 16, 20, 23, 31]
     y = [3, 3, 5, 6, 15, 17, 11, 18]
+    val1 = [1, 1]
+    val2 = [2, 2]
+    val3 = [3, 3]
     
     var = CurveFitting(x, y)
-    res1 = var.first_norm()
-    res2 = var.second_norm()
-    res3 = var.infinity_norm()
+    var.optimize_norm1(val1)
+    var.optimize_norm2(val2)
+    var.optimize_norm3(val3)
+    
+    print(var.norm1_val)
+    print(var.norm2_val)
+    print(var.norm3_val)
 
-    print(var.norm1)
-    print(res1)
-    print(var.norm2)
-    print(res2)
-    print(var.norm3)
-    print(res3)
     
