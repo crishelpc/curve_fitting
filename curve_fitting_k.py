@@ -30,29 +30,21 @@ class CurveFitting_k:
         return forecast_x, forecast_y
 
 if __name__ == "__main__":
-    # Original data
     x = [0, 5, 8, 12, 16, 20, 23, 31]
     y = [3, 3, 5, 6, 15, 17, 11, 18]
     val2 = [2, 2]
     
-    # Initialize and fit
     var = CurveFitting_k(x, y)
     var.optimize_norm2(val2)
     
-    # Forecast k future points
     k = 7
     forecast_x, forecast_y = var.forecast(k)
     
-    # Visualization
     plt.scatter(x, y, label="Original Data")
     plt.plot(x, y)
     plt.scatter(forecast_x, forecast_y, label="Forcasted Data")
     plt.plot(forecast_x, forecast_y)
     plt.plot(var.x_values, var.norm2_val, color="green", label="Fitted Line")
-    # plt.scatter(forecast_x, forecast_y, color="red", label="Forecasted Points")
-    # plt.plot(forecast_x, forecast_y, color="orange", linestyle="--", label="Forecasted Line")
-    # plt.xlabel("X values")
-    # plt.ylabel("Y values")
     plt.legend()
     plt.title("Linear Regression with Forecast")
     plt.show()
