@@ -313,9 +313,7 @@ def graph_interpolation(x, y, b):
     
     # Filter out None values
     a = np.array([x[i] for i in range(len(x)) if y[i] is not None])
-    print(a)
     y = np.array([val for val in y if val is not None])
-    print(y)
     
     # Interpolation
     anew = np.linspace(a.min(), a.max(), 100)
